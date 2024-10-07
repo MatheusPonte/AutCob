@@ -62,6 +62,6 @@ p = sync_playwright().start()
 navegador = p.chromium.launch(headless=False) #headless (debaixo dos panos)
 pagina = navegador.new_page()
 
-Logar(pagina, "Victoria Ellen", "Meireles@2024")
+Logar(pagina, "", "")
 Pesquisar(pagina)
 usuario(pagina)
