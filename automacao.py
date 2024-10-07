@@ -1,6 +1,7 @@
 from playwright.sync_api import sync_playwright;
 import time
-from test import dado;
+from test import dado
+import os
 
 def Logar(username, password):
     with sync_playwright() as p:
@@ -19,9 +20,6 @@ def Logar(username, password):
         pagina.locator('xpath=//*[@id="menusuperior"]/a/i').click()
     #Clicando no quadrado
         pagina.locator('xpath=//*[@id="lkbCobranca"]').click()
-    #Clicando na area do nome
-        pagina.fill('xpath=//*[@id="txtNome"]',dado)
-        time.sleep(10)
 #Area da cobrança
     #Estagio
         pagina.locator('xpath=//*[@id="divdadosContrato"]/div[4]/div/button').click()
@@ -35,6 +33,9 @@ def Logar(username, password):
         time.sleep(5);  
         pagina.locator('xpath=//*[@id="divdadosContrato"]/div[1]/div/ul/li[2]/a/label').click()
         pagina.locator('xpath=//*[@id="divdadosContrato"]/div[1]/div/ul/li[3]/a/label').click()
+        #Clicando na area do nome
+        # pagina.fill('xpath=//*[@id="txtNome"]',dado)
+        # time.sleep(10)
     #pesquisar
         pagina.locator('xpath=//*[@id="btnPesquisar"]').click()
     #confirmar
@@ -53,5 +54,5 @@ def Logar(username, password):
         time.sleep(5);  
 
 
-Logar("test","test")
+Logar("Victoria Ellen","Meireles@2024")
 

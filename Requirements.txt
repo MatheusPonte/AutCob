@@ -1,0 +1,4 @@
+Pandas
+Playwright
+selenium
+python-dotenv
