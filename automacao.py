@@ -3,56 +3,65 @@ import time
 from test import dado
 import os
 
-def Logar(username, password):
-    with sync_playwright() as p:
-        navegador = p.chromium.launch(headless=False) #headless (debaixo dos panos)
-        pagina = navegador.new_page()
+
+     
+def Logar(p,username, password):
     #Pagina do Site
-        pagina.goto("https://app.cobmais.com.br/cob/pesquisa")
+        p.goto("https://app.cobmais.com.br/cob/pesquisa")
     #Login
-        pagina.fill('xpath=//*[@id="Username"]', username)
+        p.fill('xpath=//*[@id="Username"]', username)
     #Senha
-        pagina.fill('xpath=//*[@id="Password"]', password)
+        p.fill('xpath=//*[@id="Password"]', password)
     #Botão de entrar
-        pagina.get_by_role('button').click()
+        p.get_by_role('button').click()
         time.sleep(5);
+
+#------------------------------------------------------
+def Pesquisar(p):
     #Quadradin
-        pagina.locator('xpath=//*[@id="menusuperior"]/a/i').click()
+            p.locator('xpath=//*[@id="menusuperior"]/a/i').click()
     #Clicando no quadrado
-        pagina.locator('xpath=//*[@id="lkbCobranca"]').click()
+            p.locator('xpath=//*[@id="lkbCobranca"]').click()
 #Area da cobrança
     #Estagio
-        pagina.locator('xpath=//*[@id="divdadosContrato"]/div[4]/div/button').click()
-        time.sleep(5)
-        pagina.locator('xpath=//*[@id="divdadosContrato"]/div[4]/div/ul/li[3]/a/label').click()
-        time.sleep(5)
-        pagina.locator('xpath=//*[@id="divdadosContrato"]/div[4]/div/ul/li[4]/a/label/input').click()
-        time.sleep(5)
+            p.locator('xpath=//*[@id="divdadosContrato"]/div[4]/div/button').click()
+            time.sleep(5)
+            p.locator('xpath=//*[@id="divdadosContrato"]/div[4]/div/ul/li[3]/a/label').click()
+            time.sleep(5)
+            p.locator('xpath=//*[@id="divdadosContrato"]/div[4]/div/ul/li[4]/a/label/input').click()
+            time.sleep(5)
     #Credor
-        pagina.locator('xpath=//*[@id="divdadosContrato"]/div[1]/div/button').click()
-        time.sleep(5);  
-        pagina.locator('xpath=//*[@id="divdadosContrato"]/div[1]/div/ul/li[2]/a/label').click()
-        pagina.locator('xpath=//*[@id="divdadosContrato"]/div[1]/div/ul/li[3]/a/label').click()
-        #Clicando na area do nome
-        # pagina.fill('xpath=//*[@id="txtNome"]',dado)
-        # time.sleep(10)
-    #pesquisar
-        pagina.locator('xpath=//*[@id="btnPesquisar"]').click()
-    #confirmar
-        pagina.locator('xpath=//*[@id="btnConfirmaAtencao"]').click()
-    #Selecionando a pessoa
-        pagina.locator('xpath=//*[@id="tbCliente"]/tbody/tr[1]/td[10]/a').click()
-    #Selecionando telefone
-        pagina.locator('xpath=//*[@id="tbTelefone"]/tbody/tr[1]/td[4]/div/button').click()
-        pagina.locator('xpath=//*[@id="tbTelefone"]/tbody/tr[1]/td[4]/div/ul/li[3]/a').click()
-    #alternado wpp e autorizando
-        pagina.locator('xpath=//*[@id="frmTelefone"]/fieldset/div/div[2]/div[2]/div/div[1]/label').click()
-        pagina.locator('xpath=//*[@id="frmTelefone"]/fieldset/div/div[2]/div[3]/div/div[1]/label').click()
-    #salvar
-        pagina.locator('xpath=//*[@id="btnSalvarTelefone"]').click()
+            p.locator('xpath=//*[@id="divdadosContrato"]/div[1]/div/button').click()
+            time.sleep(5);  
+            p.locator('xpath=//*[@id="divdadosContrato"]/div[1]/div/ul/li[2]/a/label').click()
+            p.locator('xpath=//*[@id="divdadosContrato"]/div[1]/div/ul/li[3]/a/label').click()
+            #Clicando na area do nome
+            # p.fill('xpath=//*[@id="txtNome"]',dado)
+            # time.sleep(10)
+        #pesquisar
+            p.locator('xpath=//*[@id="btnPesquisar"]').click()
+        #confirmar caso aapareceça
+            p.locator('xpath=//*[@id="btnConfirmaAtencao"]').click()
 
-        time.sleep(5);  
+#----------------
+def usuario(p):
+        #Selecionando a pessoa
+        p.locator('xpath=//*[@id="tbCliente"]/tbody/tr[1]/td[10]/a').click()
+        #Selecionando telefone
+        p.locator('xpath=//*[@id="tbTelefone"]/tbody/tr[1]/td[4]/div/button').click()
+        p.locator('xpath=//*[@id="tbTelefone"]/tbody/tr[1]/td[4]/div/ul/li[3]/a').click()
+        #alternado wpp e autorizando
+        p.locator('xpath=//*[@id="frmTelefone"]/fieldset/div/div[2]/div[2]/div/div[1]/label').click()
+        p.locator('xpath=//*[@id="frmTelefone"]/fieldset/div/div[2]/div[3]/div/div[1]/label').click()
+        #salvar
+        p.locator('xpath=//*[@id="btnSalvarTelefone"]').click()
+        time.sleep(2);  
+        p.locator('xpath=//*[@id="btnVoltar"]').click()
 
+p = sync_playwright().start()
+navegador = p.chromium.launch(headless=False) #headless (debaixo dos panos)
+pagina = navegador.new_page()
 
-Logar("",")
-
+Logar(pagina, "Victoria Ellen", "Meireles@2024")
+Pesquisar(pagina)
+usuario(pagina)
