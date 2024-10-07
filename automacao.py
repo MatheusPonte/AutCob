@@ -54,5 +54,5 @@ def Logar(username, password):
         time.sleep(5);  
 
 
-Logar("Victoria Ellen","Meireles@2024")
+Logar("",")
 
