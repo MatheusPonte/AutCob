@@ -23,53 +23,70 @@ def Logar(p,username, password):
         time.sleep(5);
 
 #------------------------------------------------------
-def Pesquisar(p):
-    #Quadradin
+def Pesquisar(p, nomes):
+            #Quadradin
             p.locator('xpath=//*[@id="menusuperior"]/a/i').click()
     #Clicando no quadrado
             p.locator('xpath=//*[@id="lkbCobranca"]').click()
+            if p.locator('xpath=//*[@id="beamerPushModal"]'):
+                    p.locator('//*[@id="pushActionRefuse"]').click()
 #Area da cobrança
-    #Estagio
+#Estagio
             p.locator('xpath=//*[@id="divdadosContrato"]/div[4]/div/button').click()
-            time.sleep(5)
+            time.sleep(1)
             p.locator('xpath=//*[@id="divdadosContrato"]/div[4]/div/ul/li[3]/a/label').click()
-            time.sleep(5)
+            time.sleep(1)
             p.locator('xpath=//*[@id="divdadosContrato"]/div[4]/div/ul/li[4]/a/label/input').click()
-            time.sleep(5)
-    #Credor
-            p.locator('xpath=//*[@id="divdadosContrato"]/div[1]/div/button').click()
-            time.sleep(5);  
-            p.locator('xpath=//*[@id="divdadosContrato"]/div[1]/div/ul/li[2]/a/label').click()
-            p.locator('xpath=//*[@id="divdadosContrato"]/div[1]/div/ul/li[3]/a/label').click()
-            #Clicando na area do nome
-            p.fill('xpath=//*[@id="txtNome"]',nomes)
-            time.sleep(10)
-        #pesquisar
-            p.locator('xpath=//*[@id="btnPesquisar"]').click()
-        # #confirmar caso aapareceça
-        #     p.locator('xpath=//*[@id="btnConfirmaAtencao"]').click()
+            time.sleep(1)
+            for nome in nomes:
+                nome_str = str(nome)
+                p.locator('xpath=//*[@id="txtCPFCNPJ"]').click()
+#Clicando na area do nome
+                p.fill('xpath=//*[@id="txtCPFCNPJ"]',nome_str)
+                p.locator('xpath=//*[@id="txtCPFCNPJ"]').click()
+                time.sleep(5)
+ #pesquisar
+                p.locator('xpath=//*[@id="btnPesquisar"]').click()
+                time.sleep(10)
+                usuario(p)
+#confirmar caso aapareceça
+#p.locator('xpath=//*[@id="btnConfirmaAtencao"]').click()
+
+def obter_tamanho_tabela(p, xpath):
+    # Obtendo o tamanho da tabela através do XPath
+    linhas = p.locator(xpath)
+    numero_de_linhas = linhas.count()
+    print(f"Número de linhas na tabela: {numero_de_linhas}")
+    return numero_de_linhas
 
 #----------------
-def usuario(p):
+def usuario(p):        
         #Selecionando a pessoa
         p.locator('xpath=//*[@id="tbCliente"]/tbody/tr[1]/td[10]/a').click()
-        #Selecionando telefone
-        p.locator('xpath=//*[@id="tbTelefone"]/tbody/tr[1]/td[4]/div/button').click()
-        p.locator('xpath=//*[@id="tbTelefone"]/tbody/tr[1]/td[4]/div/ul/li[3]/a').click()
+        #Selecionando telefone acao 1
+        time.sleep(5)
+        xpath_tabela = '//*[@id="tbTelefone"]/tbody/tr'
+        tamanho_tabela = obter_tamanho_tabela(pagina, xpath_tabela)
+        i = 0
+        while i < tamanho_tabela:
+            p.locator(f'xpath=//*[@id="tbTelefone"]/tbody/tr[{i+1}]/td[4]/div/button').click()
+            p.locator(f'xpath=//*[@id="tbTelefone"]/tbody/tr[{i+1}]/td[4]/div/ul/li[4]/a').click()
         #alternado wpp e autorizando
-        p.locator('xpath=//*[@id="frmTelefone"]/fieldset/div/div[2]/div[2]/div/div[1]/label').click()
-        p.locator('xpath=//*[@id="frmTelefone"]/fieldset/div/div[2]/div[3]/div/div[1]/label').click()
+            p.locator('xpath=//*[@id="frmTelefone"]/fieldset/div/div[2]/div[2]/div/div[1]/label').click()
+            p.locator('xpath=//*[@id="frmTelefone"]/fieldset/div/div[2]/div[3]/div/div[1]/label').click()
         #salvar
-        p.locator('xpath=//*[@id="btnSalvarTelefone"]').click()
-        time.sleep(2);  
+            p.locator('xpath=//*[@id="btnSalvarTelefone"]').click()
+            i = i + 1
+            time.sleep(5)
         p.locator('xpath=//*[@id="btnVoltar"]').click()
 
 p = sync_playwright().start()
-navegador = p.chromium.launch(headless=False) #headless (debaixo dos panos)
+navegador = p.chromium.launch(headless=False, args=["--start-maximized"]) #headless (debaixo dos panos)
 pagina = navegador.new_page()
 
-Logar(pagina, userw, passw)
-print(nomes)
 
-Pesquisar(pagina)
+Logar(pagina, userw, passw)
+
+Pesquisar(pagina, nomes)
 usuario(pagina)
+
