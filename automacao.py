@@ -1,7 +1,13 @@
 from playwright.sync_api import sync_playwright;
 import time
-from test import dado
+from test import nomes
 import os
+import pyautogui as pya
+from dotenv import load_dotenv
+
+load_dotenv()
+userw = os.getenv('USERN')
+passw = os.getenv('PASSWORD')
 
 
      
@@ -36,12 +42,12 @@ def Pesquisar(p):
             p.locator('xpath=//*[@id="divdadosContrato"]/div[1]/div/ul/li[2]/a/label').click()
             p.locator('xpath=//*[@id="divdadosContrato"]/div[1]/div/ul/li[3]/a/label').click()
             #Clicando na area do nome
-            # p.fill('xpath=//*[@id="txtNome"]',dado)
-            # time.sleep(10)
+            p.fill('xpath=//*[@id="txtNome"]',nomes)
+            time.sleep(10)
         #pesquisar
             p.locator('xpath=//*[@id="btnPesquisar"]').click()
-        #confirmar caso aapareceça
-            p.locator('xpath=//*[@id="btnConfirmaAtencao"]').click()
+        # #confirmar caso aapareceça
+        #     p.locator('xpath=//*[@id="btnConfirmaAtencao"]').click()
 
 #----------------
 def usuario(p):
@@ -62,6 +68,8 @@ p = sync_playwright().start()
 navegador = p.chromium.launch(headless=False) #headless (debaixo dos panos)
 pagina = navegador.new_page()
 
-Logar(pagina, "", "")
+Logar(pagina, userw, passw)
+print(nomes)
+
 Pesquisar(pagina)
 usuario(pagina)
