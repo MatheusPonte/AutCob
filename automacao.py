@@ -5,6 +5,7 @@ import os
 import pyautogui as pya
 from dotenv import load_dotenv
 
+
 load_dotenv()
 userw = os.getenv('USERN')
 passw = os.getenv('PASSWORD')
@@ -28,6 +29,7 @@ def Pesquisar(p, nomes):
             p.locator('xpath=//*[@id="menusuperior"]/a/i').click()
     #Clicando no quadrado
             p.locator('xpath=//*[@id="lkbCobranca"]').click()
+            #cookies
             if p.locator('xpath=//*[@id="beamerPushModal"]'):
                     p.locator('//*[@id="pushActionRefuse"]').click()
 #Area da cobrança
@@ -44,10 +46,10 @@ def Pesquisar(p, nomes):
 #Clicando na area do nome
                 p.fill('xpath=//*[@id="txtCPFCNPJ"]',nome_str)
                 p.locator('xpath=//*[@id="txtCPFCNPJ"]').click()
-                time.sleep(5)
+                time.sleep(4)
  #pesquisar
                 p.locator('xpath=//*[@id="btnPesquisar"]').click()
-                time.sleep(10)
+                time.sleep(4)
                 usuario(p)
 #confirmar caso aapareceça
 #p.locator('xpath=//*[@id="btnConfirmaAtencao"]').click()
@@ -70,12 +72,26 @@ def usuario(p):
         i = 0
         while i < tamanho_tabela:
             p.locator(f'xpath=//*[@id="tbTelefone"]/tbody/tr[{i+1}]/td[4]/div/button').click()
-            p.locator(f'xpath=//*[@id="tbTelefone"]/tbody/tr[{i+1}]/td[4]/div/ul/li[4]/a').click()
+            try:
+                   time.sleep(5)
+                   img = pya.locateOnScreen('img/Alterar.png', confidence=0.8)
+                   pya.click(img)
+            except:
+                   time.sleep(1)
         #alternado wpp e autorizando
             p.locator('xpath=//*[@id="frmTelefone"]/fieldset/div/div[2]/div[2]/div/div[1]/label').click()
             p.locator('xpath=//*[@id="frmTelefone"]/fieldset/div/div[2]/div[3]/div/div[1]/label').click()
         #salvar
             p.locator('xpath=//*[@id="btnSalvarTelefone"]').click()
+            try:
+                print('test no try')
+                time.sleep(5)
+                pya.locateOnScreen('img/AlertaAmarelo.png', confidence=0.7)
+                p.locator('xpath=//*[@id="btnFecharTelefone"]').click()
+                print('percorri o locate amarelo')
+            except:
+                   print('passei')
+                   time.sleep(1)
             i = i + 1
             time.sleep(5)
         p.locator('xpath=//*[@id="btnVoltar"]').click()
