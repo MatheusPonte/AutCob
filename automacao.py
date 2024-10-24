@@ -1,19 +1,37 @@
 from playwright.sync_api import sync_playwright;
 import time
-from planilha import nomes, concluido
-from planilha import df, df2
-from planilha import arquivo_excel, arquivo_excel2
+from planilha import *
+
 import os
 import pyautogui as pya
 from dotenv import load_dotenv
+from tkinter import *
+from tkinter import filedialog
 
-position = 1
+
+count = 0
 load_dotenv()
 userw = os.getenv('USERN')
 passw = os.getenv('PASSWORD')
 
 
-     
+
+def ler_contador():
+    try:
+        with open('contador.txt', 'r') as f:
+            return int(f.read().strip())
+    except FileNotFoundError:
+        return 0
+def salvar_contador(valor):
+    with open('contador.txt', 'w') as f:
+        f.write(str(valor))
+
+count = ler_contador()
+def contador():
+    count = count + 1
+    print(count)
+
+
 def Logar(p,username, password):
     #Pagina do Site
         p.goto("https://app.cobmais.com.br/cob/pesquisa")
@@ -70,7 +88,7 @@ def usuario(p):
         #Selecionando telefone acao 1
         time.sleep(5)
         xpath_tabela = '//*[@id="tbTelefone"]/tbody/tr'
-        tamanho_tabela = obter_tamanho_tabela(pagina, xpath_tabela)
+        tamanho_tabela = obter_tamanho_tabela(p, xpath_tabela)
         i = 0
         while i < tamanho_tabela:
             p.locator(f'xpath=//*[@id="tbTelefone"]/tbody/tr[{i+1}]/td[4]/div/button').click()
@@ -98,14 +116,30 @@ def usuario(p):
             time.sleep(5)
 
         p.locator('xpath=//*[@id="btnVoltar"]').click()
-        
+        global count
+        count += 1
+        salvar_contador(count)
+        print(f"Automação completada {count} vez(es).")
 
-p = sync_playwright().start()
-navegador = p.chromium.launch(headless=False, args=["--start-maximized"]) #headless (debaixo dos panos)
-pagina = navegador.new_page()
 
-Logar(pagina, userw, passw)
+def rodar_automacao():
+    with sync_playwright() as p:
+        navegador = p.chromium.launch(headless=False, args=["--start-maximized"])
+        pagina = navegador.new_page()
+        Logar(pagina, userw, passw)
+        Pesquisar(pagina, nomes)
+        usuario(pagina)
+        contador()
 
-Pesquisar(pagina, nomes)
-usuario(pagina)
+
+
+janela = Tk()
+janela.title("CobeMais")
+text = Label(janela, text = "Automação Cobinho")
+text.grid(column=0, row = 0)
+button2 = Button(janela,text="Importar Planilha")
+button2.grid(column=0,row=1)
+button = Button(janela, text="Rodar automação", command= rodar_automacao)
+button.grid(column=0,row=2)
+janela.mainloop()
 
