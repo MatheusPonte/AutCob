@@ -1,11 +1,13 @@
 from playwright.sync_api import sync_playwright;
 import time
-from test import nomes
+from planilha import nomes, concluido
+from planilha import df, df2
+from planilha import arquivo_excel, arquivo_excel2
 import os
 import pyautogui as pya
 from dotenv import load_dotenv
 
-
+position = 1
 load_dotenv()
 userw = os.getenv('USERN')
 passw = os.getenv('PASSWORD')
@@ -51,8 +53,8 @@ def Pesquisar(p, nomes):
                 p.locator('xpath=//*[@id="btnPesquisar"]').click()
                 time.sleep(4)
                 usuario(p)
-#confirmar caso aapareceça
-#p.locator('xpath=//*[@id="btnConfirmaAtencao"]').click()
+                
+
 
 def obter_tamanho_tabela(p, xpath):
     # Obtendo o tamanho da tabela através do XPath
@@ -94,12 +96,13 @@ def usuario(p):
                    time.sleep(1)
             i = i + 1
             time.sleep(5)
+
         p.locator('xpath=//*[@id="btnVoltar"]').click()
+        
 
 p = sync_playwright().start()
 navegador = p.chromium.launch(headless=False, args=["--start-maximized"]) #headless (debaixo dos panos)
 pagina = navegador.new_page()
-
 
 Logar(pagina, userw, passw)
 
